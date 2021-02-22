@@ -16,5 +16,3 @@
     region: "{{ region }}"
     state: "{{ state }}"
   loop: "{{ tags }}"
-
-
