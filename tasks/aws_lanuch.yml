@@ -1,8 +1,8 @@
 # task file for k8ssetup
 - name: Launching EC2 instances
   amazon.aws.ec2:
-    aws_access_key: "{{ access_key | password_hash['sha512'] }}"
-    aws_secret_key: "{{ secret_key | password_hash['sha512'] }}"
+    aws_access_key: "{{ access_key  }}"
+    aws_secret_key: "{{ secret_key }}"
     key_name: "{{ key_name }}"
     instance_type: "{{ instance_type }}"
     image: "{{ image }}"

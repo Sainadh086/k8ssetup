@@ -1,11 +1,8 @@
 # main.yml the role start's here
-
+#-------------------------------
 - include_tasks: base.yml
-
 - include_tasks: master_setup.yml
   when: inventory_hostname == 'Kube_Master'
-
-
 - include_tasks: node_setup.yml
   when: inventory_hostname != 'Kube_Master'
 
