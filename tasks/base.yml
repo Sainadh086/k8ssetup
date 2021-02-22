@@ -1,0 +1,45 @@
+# tasks that can be performed on Master and Node
+
+- name: Install Docker
+  package:
+    name: "docker"
+    state: present
+
+- name: Changing docker driver
+  copy:
+    src: daemon.json
+    dest: "/etc/docker/daemon.json"
+
+- name: Starting Docekr services
+  service:
+    name: docker
+    state: restarted
+    enabled: yes
+
+- name: Configure Docker Repo
+  copy:
+    dest: "/etc/yum.repos.d/kubernetes.repo"
+    src: kubernetes.repo
+
+- name: Installing the k8s applications
+  command: "yum install -y kubelet kubeadm kubectl --disableexcludes=kubernetes"
+
+- name: Starting kubelet services
+  service:
+    name: "kubelet"
+    state: restarted
+    enabled: yes
+
+- name: Installing iproute-tc
+  package:
+    name: 'iproute-tc'
+    state: present
+
+- name: Configuring network
+  shell: "echo '1' > /proc/sys/net/bridge/bridge-nf-call-iptables"
+  
+  #copy:
+  # dest: "/etc/sysctl.d/k8s.conf"
+  # content:
+  #   - "net.bridge.bridge-nf-call-ip6tables = 1"
+  #   - "net.bridge.bridge-nf-call-iptables = 1"

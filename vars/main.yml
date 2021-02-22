@@ -1,0 +1,13 @@
+key_name: "ec2_instance.pem"
+instance_type: "t2.micro"
+image: "ami-08e0ca9924195beba"
+group_id: "sg-0c8ed1e04983ed5e4"
+region: "ap-south-1"
+state: "Create"
+access_key: "**Add your key**"
+secret_key: "**Add your key**"
+
+
+tags:
+  - Kube_Master
+  - Kube_Node1

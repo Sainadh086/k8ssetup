@@ -1,0 +1,42 @@
+# setting up master node
+
+
+- name: Initializing Kubeadm Services
+  command: kubeadm init --pod-network-cidr=10.240.0.0/16 --ignore-preflight-errors=NumCPU --ignore-preflight-errors=Mem
+  ignore_errors: true
+
+- name: Creating .kube directory
+  file:
+    path: ~/.kube
+    state: directory
+    mode: 0755
+
+- name: link the admin.conf with .kube/admin file
+  file:
+    src: /etc/kubernetes/admin.conf
+    dest: ~/.kube/config
+    state: link
+    mode: 0644
+
+- name: Generating a token
+  command: kubeadm token create  --print-join-command
+  register: token
+
+
+- name: Set the kubeadm join command globally
+  set_fact:
+    kubernetes_join_command: >
+      {{ token.stdout }}
+  when: token.stdout is defined
+  delegate_to: "{{ item }}"
+  delegate_facts: true
+  with_items: "{{ groups['all'] }}"
+
+
+- name: Transfering network file
+  copy:
+    src: kube-flannel.yml
+    dest: /root/kube-flannel.yml
+
+- name: Creating an Overlay Network to connect worker nodes
+  command: kubectl apply -f /root/kube-flannel.yml

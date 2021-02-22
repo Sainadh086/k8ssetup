@@ -1,0 +1,20 @@
+# task file for k8ssetup
+- name: Launching EC2 instances
+  amazon.aws.ec2:
+    aws_access_key: "{{ access_key | password_hash['sha512'] }}"
+    aws_secret_key: "{{ secret_key | password_hash['sha512'] }}"
+    key_name: "{{ key_name }}"
+    instance_type: "{{ instance_type }}"
+    image: "{{ image }}"
+    vpc_subnet_id: "{{ vpc_subnet_id }}"
+    wait: yes
+    count: 1
+    assign_public_ip: "yes"
+    instance_tags:
+      Name: "{{ item }}"
+    group_id: "{{ group_id }}"
+    region: "{{ region }}"
+    state: "{{ state }}"
+  loop: "{{ tags }}"
+
+
