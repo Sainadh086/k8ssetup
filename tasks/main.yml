@@ -5,4 +5,3 @@
   when: inventory_hostname == 'Kube_Master'
 - include_tasks: node_setup.yml
   when: inventory_hostname != 'Kube_Master'
-
